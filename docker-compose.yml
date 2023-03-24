@@ -6,12 +6,10 @@ services:
       - 15672:15672
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
-    environment:
-      RABBITMQ_DEFAULT_USER: ictu
-      RABBITMQ_DEFAULT_PASS: ictu
     networks:
       - crawler
-
+    env_file:
+      - .env
 networks:
   crawler:
 
