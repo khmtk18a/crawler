@@ -10,9 +10,20 @@ services:
       - crawler
     env_file:
       - .env
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - crawler
+    volumes:
+      - cache:/data
+
 networks:
   crawler:
 
 
 volumes:
   rabbitmq_data:
+  cache:
