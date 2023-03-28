@@ -8,8 +8,6 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - crawler
-    env_file:
-      - .env
   redis:
     image: redis:latest
     restart: always
