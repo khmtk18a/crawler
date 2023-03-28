@@ -1,10 +1,7 @@
-from tasks import hello, app
+from tasks import hello
 
-def on_result(message):
+def on_message(message):
     print(message)
 
-r1 = hello.apply_async(args=('hi', 5))
-r2 = hello.apply_async(args=('hello', 2))
-
-r1.get(on_message=on_result)
-r2.get(on_message=on_result)
+r = hello.apply_async(args=('Hello World', 5))
+r.get(on_message=on_message)
