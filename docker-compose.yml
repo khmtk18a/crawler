@@ -1,0 +1,53 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - crawler
+    healthcheck:
+      test: curl -f http://localhost:15672
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:latest
+    hostname: redis
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - crawler
+    volumes:
+      - cache:/data
+  flower:
+    build: .
+    command: celery --broker=amqp://guest@rabbitmq:5672// flower
+    ports:
+      - 5555:5555
+    networks:
+      - crawler
+    depends_on:
+      - rabbitmq
+  worker:
+    build: .
+    command: celery -A tasks worker
+    networks:
+      - crawler
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - rabbitmq
+
+networks:
+  crawler:
+
+
+volumes:
+  rabbitmq_data:
+  cache:
